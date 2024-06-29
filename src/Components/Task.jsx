@@ -13,7 +13,7 @@ const Task = ({ title, description, deleteTask, markAsDone, index }) => {
           deleteTask(index);
         }}
       >
-        -
+        Delete
       </button>
     </div>
   );
