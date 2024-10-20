@@ -8,28 +8,33 @@ const Home = () => {
 
   const [tasks, setTasks] = useState(initialArray);
   const [title, setTitle] = useState("");
-  const [descreption, setDescreption] = useState("");
+  const [description, setDescription] = useState("");
 
   const submitHandler = (e) => {
     e.preventDefault();
-    setTasks([...tasks, { title, descreption }]);
+
+    if (title.trim() === "") {
+      return;
+    }
+
+    setTasks([...tasks, { title, description }]);
+    setTitle("");
+    setDescription("");
   };
 
   const deleteTask = (index) => {
-    const filteredArr = tasks.filter((val, i) => {
-      return i !== index;
-    });
+    const filteredArr = tasks.filter((_, i) => i !== index);
     setTasks(filteredArr);
   };
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, []);
+  }, [tasks]);
 
   return (
-    <div className="container" onSubmit={submitHandler}>
+    <div className="container">
       <h1>Daily Goal</h1>
-      <form>
+      <form onSubmit={submitHandler}>
         <input
           type="text"
           placeholder="Title"
@@ -38,21 +43,27 @@ const Home = () => {
         />
         <textarea
           placeholder="Description"
-          value={descreption}
-          onChange={(e) => setDescreption(e.target.value)}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         ></textarea>
-        <button type="submit">ADD</button>
+        <button type="submit" id="add-btn">
+          ADD
+        </button>
       </form>
 
-      {tasks.map((item, index) => (
-        <Task
-          key={index}
-          title={item.title}
-          description={item.descreption}
-          deleteTask={deleteTask}
-          index={index}
-        />
-      ))}
+      {tasks.length === 0 ? (
+        <p>No tasks available. Please add a task.</p>
+      ) : (
+        tasks.map((item, index) => (
+          <Task
+            key={index}
+            title={item.title}
+            description={item.description}
+            deleteTask={deleteTask}
+            index={index}
+          />
+        ))
+      )}
     </div>
   );
 };

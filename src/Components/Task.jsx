@@ -9,6 +9,7 @@ const Task = ({ title, description, deleteTask, markAsDone, index }) => {
       </div>
 
       <button
+        id="delete-btn"
         onClick={() => {
           deleteTask(index);
         }}
